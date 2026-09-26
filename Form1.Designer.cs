@@ -28,23 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            comboBox1 = new ComboBox();
+            cbMidiDevices = new ComboBox();
+            bRefresh = new Button();
             SuspendLayout();
             // 
-            // comboBox1
+            // cbMidiDevices
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(12, 12);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 0;
+            cbMidiDevices.FormattingEnabled = true;
+            cbMidiDevices.Location = new Point(12, 12);
+            cbMidiDevices.Name = "cbMidiDevices";
+            cbMidiDevices.Size = new Size(147, 23);
+            cbMidiDevices.TabIndex = 0;
+            // 
+            // bRefresh
+            // 
+            bRefresh.Location = new Point(165, 12);
+            bRefresh.Name = "bRefresh";
+            bRefresh.Size = new Size(61, 23);
+            bRefresh.TabIndex = 1;
+            bRefresh.Text = "Refresh";
+            bRefresh.UseVisualStyleBackColor = true;
+            bRefresh.Click += bRefresh_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(409, 336);
-            Controls.Add(comboBox1);
+            Controls.Add(bRefresh);
+            Controls.Add(cbMidiDevices);
             Name = "Form1";
             Text = "Form1";
             FormClosing += Form1_FormClosing;
@@ -54,6 +66,7 @@
 
         #endregion
 
-        private ComboBox comboBox1;
+        private ComboBox cbMidiDevices;
+        private Button bRefresh;
     }
 }

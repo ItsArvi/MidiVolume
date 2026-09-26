@@ -15,20 +15,7 @@ namespace MidiVolume
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            deviceList = InputDevice.GetAll().ToArray();
-            comboBox1.Items.Clear();
-            if(deviceList.Length > 0)
-            {
-                foreach (var device in deviceList)
-                {
-                    comboBox1.Items.Add(device.Name);
-                }
-                comboBox1.SelectedIndex = 0;
-            }
-            else
-            {
-                MessageBox.Show("no midi devices found");
-            }
+            RefreshMidiDevices();
         }
 
         private void OnMidiEventReceived(object? sender, MidiEventReceivedEventArgs e)
@@ -53,6 +40,32 @@ namespace MidiVolume
                 midiDevice.Dispose();
             }
             base.OnFormClosing(e);
+        }
+
+        private void RefreshMidiDevices()
+        {
+            deviceList = InputDevice.GetAll().ToArray();
+            cbMidiDevices.Items.Clear();
+            if (deviceList.Length > 0)
+            {
+                foreach (var device in deviceList)
+                {
+                    cbMidiDevices.Items.Add(device.Name);
+                }
+                cbMidiDevices.SelectedIndex = 0;
+            }
+            else
+            {
+                cbMidiDevices.SelectedIndex = -1;
+                cbMidiDevices.Text = string.Empty;
+                cbMidiDevices.Items.Clear();
+                MessageBox.Show("no midi devices found");
+            }
+        }
+
+        private void bRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshMidiDevices();
         }
     }
 }
