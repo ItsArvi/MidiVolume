@@ -7,6 +7,9 @@ namespace MidiVolume
     {
         private InputDevice[] deviceList;
         private InputDevice? midiDevice;
+        private int currentKnobId = 0;
+        private bool isLinkingKnobMode = false;
+        private bool isLinked = false;
 
         public Form1()
         {
@@ -22,13 +25,17 @@ namespace MidiVolume
         {
             if (e.Event is ControlChangeEvent ccEvent)
             {
-                int knobNum = ccEvent.ControlNumber;
-                int knobVal = ccEvent.ControlValue;
-
-                this.BeginInvoke(new Action(() =>
+                if (isLinkingKnobMode)
                 {
-                    this.Text = $"{knobNum} - {knobVal}";
-                }));
+                    currentKnobId = ccEvent.ControlNumber;
+                    isLinkingKnobMode = false;
+                    lblKnobNum.Text = $"Knob num: {currentKnobId}; Value: {ccEvent.ControlValue}";
+                    isLinked = true;
+                }
+                if (isLinked && currentKnobId == ccEvent.ControlNumber)
+                {
+                    lblKnobNum.Text = $"Knob num: {currentKnobId}; Value: {ccEvent.ControlValue}";
+                }
             }
         }
 
@@ -53,6 +60,7 @@ namespace MidiVolume
                     cbMidiDevices.Items.Add(device.Name);
                 }
                 cbMidiDevices.SelectedIndex = 0;
+                bLinkKnob.Enabled = true;
             }
             else
             {
@@ -60,12 +68,29 @@ namespace MidiVolume
                 cbMidiDevices.Text = string.Empty;
                 cbMidiDevices.Items.Clear();
                 MessageBox.Show("no midi devices found");
+                bLinkKnob.Enabled = false;
+                isLinked = false;
+                lblKnobNum.Text = string.Empty;
             }
         }
 
         private void bRefresh_Click(object sender, EventArgs e)
         {
             RefreshMidiDevices();
+        }
+
+        private void bLinkKnob_Click(object sender, EventArgs e)
+        {
+            isLinkingKnobMode = true;
+            lblKnobNum.Text = "Waiting for a value...";
+        }
+
+        private void cbMidiDevices_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            midiDevice?.EventReceived -= OnMidiEventReceived;
+            midiDevice = deviceList[cbMidiDevices.SelectedIndex];
+            midiDevice.EventReceived += OnMidiEventReceived;
+            midiDevice.StartEventsListening();
         }
     }
 }

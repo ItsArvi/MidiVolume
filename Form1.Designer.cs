@@ -30,6 +30,8 @@
         {
             cbMidiDevices = new ComboBox();
             bRefresh = new Button();
+            bLinkKnob = new Button();
+            lblKnobNum = new Label();
             SuspendLayout();
             // 
             // cbMidiDevices
@@ -39,6 +41,7 @@
             cbMidiDevices.Name = "cbMidiDevices";
             cbMidiDevices.Size = new Size(147, 23);
             cbMidiDevices.TabIndex = 0;
+            cbMidiDevices.SelectedIndexChanged += cbMidiDevices_SelectedIndexChanged;
             // 
             // bRefresh
             // 
@@ -50,11 +53,32 @@
             bRefresh.UseVisualStyleBackColor = true;
             bRefresh.Click += bRefresh_Click;
             // 
+            // bLinkKnob
+            // 
+            bLinkKnob.Enabled = false;
+            bLinkKnob.Location = new Point(12, 58);
+            bLinkKnob.Name = "bLinkKnob";
+            bLinkKnob.Size = new Size(75, 23);
+            bLinkKnob.TabIndex = 2;
+            bLinkKnob.Text = "Link knob";
+            bLinkKnob.UseVisualStyleBackColor = true;
+            bLinkKnob.Click += bLinkKnob_Click;
+            // 
+            // lblKnobNum
+            // 
+            lblKnobNum.AutoSize = true;
+            lblKnobNum.Location = new Point(93, 62);
+            lblKnobNum.Name = "lblKnobNum";
+            lblKnobNum.Size = new Size(0, 15);
+            lblKnobNum.TabIndex = 3;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(409, 336);
+            Controls.Add(lblKnobNum);
+            Controls.Add(bLinkKnob);
             Controls.Add(bRefresh);
             Controls.Add(cbMidiDevices);
             Name = "Form1";
@@ -62,11 +86,14 @@
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private ComboBox cbMidiDevices;
         private Button bRefresh;
+        private Button bLinkKnob;
+        private Label lblKnobNum;
     }
 }
