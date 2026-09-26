@@ -5,6 +5,7 @@ namespace MidiVolume
 {
     public partial class Form1 : Form
     {
+        private InputDevice[] deviceList;
         private InputDevice? midiDevice;
 
         public Form1()
@@ -14,11 +15,20 @@ namespace MidiVolume
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var inputDevices = InputDevice.GetAll();
-
-            midiDevice = inputDevices.ToArray()[0];
-            midiDevice.EventReceived += OnMidiEventReceived;
-            midiDevice.StartEventsListening();
+            deviceList = InputDevice.GetAll().ToArray();
+            comboBox1.Items.Clear();
+            if(deviceList.Length > 0)
+            {
+                foreach (var device in deviceList)
+                {
+                    comboBox1.Items.Add(device.Name);
+                }
+                comboBox1.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("no midi devices found");
+            }
         }
 
         private void OnMidiEventReceived(object? sender, MidiEventReceivedEventArgs e)
