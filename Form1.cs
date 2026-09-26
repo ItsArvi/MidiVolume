@@ -36,7 +36,11 @@ namespace MidiVolume
                 if (isLinked && currentKnobId == ccEvent.ControlNumber)
                 {
                     float volume = ccEvent.ControlValue / 127f;
-                    lblKnobNum.Text = $"Knob num: {currentKnobId}; Value: {ccEvent.ControlValue}; volume: {Math.Round(volume * 100f, 0)}";
+
+                    this.Invoke(new Action(() =>
+                    {
+                        lblKnobNum.Text = $"Knob num: {currentKnobId}; Value: {ccEvent.ControlValue}; volume: {Math.Round(volume * 100f, 0)}";
+                    }));
 
                     var enumerator = new MMDeviceEnumerator();
                     var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
@@ -72,6 +76,7 @@ namespace MidiVolume
                 }
                 cbMidiDevices.SelectedIndex = 0;
                 bLinkKnob.Enabled = true;
+                midiDevice = InputDevice.GetByIndex(cbMidiDevices.SelectedIndex);
             }
             else
             {
@@ -98,9 +103,9 @@ namespace MidiVolume
 
         private void cbMidiDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
-            StopMidiListening();
             midiDevice?.EventReceived -= OnMidiEventReceived;
-            midiDevice = deviceList[cbMidiDevices.SelectedIndex];
+            StopMidiListening();
+            midiDevice = InputDevice.GetByIndex(cbMidiDevices.SelectedIndex);
             midiDevice.EventReceived += OnMidiEventReceived;
             midiDevice.StartEventsListening();
         }
