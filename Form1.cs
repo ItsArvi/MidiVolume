@@ -47,12 +47,17 @@ namespace MidiVolume
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            StopMidiListening();
+            base.OnFormClosing(e);
+        }
+
+        private void StopMidiListening()
+        {
             if (midiDevice != null)
             {
                 midiDevice.StopEventsListening();
                 midiDevice.Dispose();
             }
-            base.OnFormClosing(e);
         }
 
         private void RefreshMidiDevices()
@@ -93,6 +98,7 @@ namespace MidiVolume
 
         private void cbMidiDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
+            StopMidiListening();
             midiDevice?.EventReceived -= OnMidiEventReceived;
             midiDevice = deviceList[cbMidiDevices.SelectedIndex];
             midiDevice.EventReceived += OnMidiEventReceived;
