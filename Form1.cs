@@ -1,5 +1,6 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using NAudio.CoreAudioApi;
 
 namespace MidiVolume
 {
@@ -34,7 +35,12 @@ namespace MidiVolume
                 }
                 if (isLinked && currentKnobId == ccEvent.ControlNumber)
                 {
-                    lblKnobNum.Text = $"Knob num: {currentKnobId}; Value: {ccEvent.ControlValue}";
+                    float volume = ccEvent.ControlValue / 127f;
+                    lblKnobNum.Text = $"Knob num: {currentKnobId}; Value: {ccEvent.ControlValue}; volume: {Math.Round(volume * 100f, 0)}";
+
+                    var enumerator = new MMDeviceEnumerator();
+                    var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+                    device.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
                 }
             }
         }
