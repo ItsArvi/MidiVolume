@@ -82,7 +82,7 @@
             Controls.Add(bRefresh);
             Controls.Add(cbMidiDevices);
             Name = "Form1";
-            Text = "Form1";
+            Text = "MidiVolume";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ResumeLayout(false);
